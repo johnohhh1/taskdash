@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { supabaseAdmin } from "@/lib/supabaseServer";
-import { TaskSchema, requireAiToken } from "@/lib/utils";
+import { TaskSchema, requireAiToken, UpsertTask } from "@/lib/utils";
 
 export async function GET(req: NextRequest) {
   try { requireAiToken(req.headers); } catch (r) { return r as Response; }
@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const sb = supabaseAdmin();
   const payload = await req.json();
   const items = Array.isArray(payload?.tasks) ? payload.tasks : [];
-  const parsed = items.map((t: unknown) => TaskSchema.parse(t)).map((t: any) => ({
+  const parsed = items.map((t: unknown) => TaskSchema.parse(t)).map((t: UpsertTask) => ({
     ...t,
     updated_at: new Date().toISOString(),
     tags: t.tags ?? null,
