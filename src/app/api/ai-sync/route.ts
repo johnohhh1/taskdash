@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const sb = supabaseAdmin();
   const payload = await req.json();
   const items = Array.isArray(payload?.tasks) ? payload.tasks : [];
-  const parsed = items.map((t: unknown) => TaskSchema.parse(t)).map((t) => ({
+  const parsed = items.map((t: unknown) => TaskSchema.parse(t)).map((t: any) => ({
     ...t,
     updated_at: new Date().toISOString(),
     tags: t.tags ?? null,
